@@ -60,6 +60,14 @@ Forked from `wp-starter-theme`. First used to build thefmextra.com (2026-09).
   desktop this hides behind the max-width gutter; on mobile, where the
   container is full-width, content runs edge-to-edge. Use `padding-block`
   instead, as `.content-with-sidebar` and `.page-content` do.
+- **`archive.php` doesn't call `the_archive_description()`, on purpose.** On
+  sites migrated from an older newspaper theme (this fleet's common case),
+  the category taxonomy's `description` field has often been repurposed by
+  the old theme to store ad-placement/view-count bookkeeping (e.g.
+  `leftsection#2000, total-views-3877, views-since-20140207-47`), not real
+  editorial copy — and it'll render right under the H1 if you add the call
+  back. Check `wp term list category --fields=name,description` on a new
+  site before re-enabling it.
 
 ## Files
 
