@@ -54,6 +54,12 @@ Forked from `wp-starter-theme`. First used to build thefmextra.com (2026-09).
   and reuses the same `np_article_card()` list markup — don't duplicate it
   into a separate file unless a specific archive type genuinely needs
   different markup.
+- **Never set top/bottom padding on a `.container`-classed element with the
+  `padding` shorthand** (e.g. `padding: 48px 0 72px`) — the 3-value form
+  zeroes left/right, silently overriding `.container`'s side padding. On
+  desktop this hides behind the max-width gutter; on mobile, where the
+  container is full-width, content runs edge-to-edge. Use `padding-block`
+  instead, as `.content-with-sidebar` and `.page-content` do.
 
 ## Files
 
