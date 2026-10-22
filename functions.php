@@ -119,5 +119,25 @@ function np_article_meta() {
 	echo '</div>';
 }
 
+/**
+ * Lazy-load embedded iframes after the first one. E-Edition pages tend to
+ * stack dozens of flipbook embeds (FlipHTML5, Issuu), and core's own
+ * lazy-loading skips iframes without width/height attributes — so they all
+ * load at once and crawl on mobile. The first iframe stays eager so the
+ * current issue shows immediately.
+ */
+function np_lazy_load_iframes($content) {
+	if (stripos($content, '<iframe') === false || !class_exists('WP_HTML_Tag_Processor')) return $content;
+	$tags = new WP_HTML_Tag_Processor($content);
+	$seen = 0;
+	while ($tags->next_tag('iframe')) {
+		if ($seen++ > 0 && $tags->get_attribute('loading') === null) {
+			$tags->set_attribute('loading', 'lazy');
+		}
+	}
+	return $tags->get_updated_html();
+}
+add_filter('the_content', 'np_lazy_load_iframes', 20);
+
 require get_template_directory() . '/inc/pagination.php';
 require get_template_directory() . '/inc/template-tags.php';
